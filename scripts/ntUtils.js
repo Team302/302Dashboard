@@ -1,5 +1,11 @@
 let populated = false;
 
+const widgetHtml = `
+<button id="textBtn" class="button" onclick="setWidgetType('text')">Set widget type to text?</button>
+<button id="inputBtn" class="button" onclick="setWidgetType('input')">Set widget type to input?</button>
+<button id="buttonBtn" class="button" onclick="setWidgetType('button')">Set widget type to button?</button>
+`
+
 /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
 function myFunction() {
@@ -74,11 +80,20 @@ function showWidgetMenu(mouseEvent)
 	const node = document.createElement("div");
 	node.style.top = mouseY(mouseEvent) + "px";
 	node.style.left = mouseX(mouseEvent) + "px"
+	node.style.justifyContent = "center";
 	node.id= "contextMenu";
 	node.className = "draggablecontent";
-	
-	const testNode = document.createTextNode("Hello World");
-	node.appendChild(testNode);
+
+	const removeButtonNode = document.createElement("button");
+	removeButtonNode.id = "removeBtn";
+	removeButtonNode.className = "button";
+	removeButtonNode.textContent = "Remove entry?";
+	removeButtonNode.onclick = removeButton.bind(this, mouseEvent);
+
+	node.appendChild(removeButtonNode);
+
+	node.insertAdjacentHTML("beforeend", widgetHtml);
+
 	document.body.appendChild(node);
 
 	function mouseX(evt) {
@@ -104,4 +119,21 @@ function showWidgetMenu(mouseEvent)
 		  return null;
 		}
 	  }
+}
+
+function removeButton(e)
+{
+	if(e.target.id.substring(e.target.id.length-8, e.target.id.length) === "-Content")
+	{
+		e.target.remove();
+	}
+	else
+	{
+		document.getElementById(e.target.id + "-Content").remove();
+	}
+}
+
+function setWidgetType(type)
+{
+
 }

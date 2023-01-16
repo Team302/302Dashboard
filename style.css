@@ -32,6 +32,13 @@ body{
     overflow: hidden;
 }
 
+#contextMenu {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 #settings-button {
     background-color: white;
     background-image: url(media/Gear.png);

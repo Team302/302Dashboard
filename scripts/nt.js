@@ -147,6 +147,7 @@ function addToDashboard(header)
 		contentNode.style.left = localStorage.getItem(header+"::XPos");
 
 		contentNode.appendChild(node);
+
 		if(contentChild !== undefined)
 		{
 			contentNode.appendChild(contentChild);
@@ -159,7 +160,6 @@ function addToDashboard(header)
 
 		//Add support for context menu
 		contentNode.addEventListener('contextmenu', function(e) {
-			//alert("You've tried to open context menu"); //here you draw your own menu
       		e.preventDefault();
 			showWidgetMenu(e);
 		}, false);
