@@ -1,9 +1,9 @@
 let populated = false;
 
 const widgetHtml = `
-<button id="textBtn" class="button" onclick="setWidgetType('text')">Set widget type to text?</button>
-<button id="inputBtn" class="button" onclick="setWidgetType('input')">Set widget type to input?</button>
-<button id="buttonBtn" class="button" onclick="setWidgetType('button')">Set widget type to button?</button>
+<button id="textBtn" class="button" data-type="text">Set widget type to text?</button>
+<button id="inputBtn" class="button" data-type="input">Set widget type to input?</button>
+<button id="buttonBtn" class="button" data-type="button">Set widget type to button?</button>
 `
 
 /* When the user clicks on the button,
@@ -94,6 +94,14 @@ function showWidgetMenu(mouseEvent)
 
 	node.insertAdjacentHTML("beforeend", widgetHtml);
 
+	for(let i = 0; i < node.children.length; i++)
+	{
+		if(node.children[i].hasAttribute("data-type"))
+		{
+			node.children[i].addEventListener("click", setWidgetType.bind(this, node.children[i].getAttribute("data-type"), mouseEvent));
+		}
+	}
+
 	document.body.appendChild(node);
 
 	function mouseX(evt) {
@@ -133,7 +141,16 @@ function removeButton(e)
 	}
 }
 
-function setWidgetType(type)
+function setWidgetType(type, e)
 {
-
+	var widgetType = type;
+	if(e.target.id.substring(e.target.id.length-8, e.target.id.length) === "-Content")
+	{
+		e.target.dataset.widgetType = widgetType;
+	}
+	else
+	{
+		document.getElementById(e.target.id + "-Content").dataset.widgetType = widgetType;
+	}
+	removeButton(e);
 }
