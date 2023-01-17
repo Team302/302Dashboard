@@ -147,15 +147,19 @@ function removeButton(e)
 function setWidgetType(type, e)
 {
 	var widgetType = type;
+	var header = "";
 	if(e.target.id.substring(e.target.id.length-8, e.target.id.length) === "-Content")
 	{
 		e.target.dataset.widgetType = widgetType;
+		header = e.target.id.substring(0, e.target.id.length-7);
 	}
 	else
 	{
 		document.getElementById(e.target.id + "-Content").dataset.widgetType = widgetType;
+		header = e.target.id;
 	}
 	removeButton(e);
+	addToDashboard(header, type);
 }
 
 /// @TODO: make sure this can work with all widget types once that feature is added
@@ -205,7 +209,7 @@ function populateSelectionDropdown()
 			const node = document.createElement("button");
 			const textnode = document.createTextNode(fields[i].textContent);
 			node.appendChild(textnode);
-			node.onclick = addToDashboard.bind(this, fields[i].textContent);
+			node.onclick = addToDashboard.bind(this, fields[i].textContent, "text");
 			dropDown.appendChild(node);
 			
 		}
@@ -237,12 +241,12 @@ function populateDefaults()
 		if(currentKey.includes("::ShowDefault"))
 		{
 			var header = currentKey.substring(0, currentKey.length-13);
-			addToDashboard(header);
+			addToDashboard(header, localStorage.getItem(header+"::WidgetType"));
 		}
 	}
 }
 
-function addToDashboard(header)
+function addToDashboard(header, type)
 {
 	if(!document.getElementById(header))
 	{
@@ -254,52 +258,39 @@ function addToDashboard(header)
 		node.appendChild(textnode);
 
 		var contentChild;
-		var entryType = "text";
 
-		//If widget to be added is saved, use localStorage value for widget type
-		if(localStorage.getItem(header+"::ShowDefault"))
+		switch(type)
 		{
-			switch(localStorage.getItem(header+"::WidgetType"))
-			{
-				
-				case "button":
-					contentChild = document.createElement("button");
-					contentChild.textContent = NetworkTables.getValue(header, "Default Value");
-					contentChild.id = header+"-Button";
-					entryType = "button";
-					break;
-				case "input":
-					contentChild = document.createElement("input");
-					contentChild.type = "text";
-					contentChild.id = header+"-Input";
-					entryType = "input";
-					contentChild.addEventListener("keydown", (e) => {
-						if (e.key === "Enter"){
-							setEntryValue(e.target.value, header);
-						}
-					});
-				case "text":
-					contentChild = document.createElement("p");
-					contentChild.textContent = NetworkTables.getValue(header, "Default Value");
-					contentChild.id = header+"-Text";
-					entryType = "text";
-				default:
-					contentChild = document.createTextNode(NetworkTables.getValue(header, "Default Value"));
-					break;
-			}
-		}
-		else //Widget is not saved, so default to text type
-		{
-			contentChild = document.createElement("p");
-			contentChild.textContent = NetworkTables.getValue(header, "Default Value");
-			contentChild.id = header+"-Text";
-			entryType = "text";
+			case "button":
+				contentChild = document.createElement("button");
+				contentChild.textContent = NetworkTables.getValue(header, "Default Value");
+				contentChild.id = header+"-Button";
+				break;
+			case "input":
+				contentChild = document.createElement("input");
+				contentChild.type = "text";
+				contentChild.id = header+"-Input";
+				contentChild.value = NetworkTables.getValue(header, "Default Value");
+				contentChild.addEventListener("keydown", (e) => {
+					if (e.key === "Enter"){
+						setEntryValue(e.target.value, header);
+					}
+				});
+				break;
+			case "text":
+				contentChild = document.createElement("p");
+				contentChild.textContent = NetworkTables.getValue(header, "Default Value");
+				contentChild.id = header+"-Text";
+				break;
+			default:
+				contentChild = document.createTextNode(NetworkTables.getValue(header, "Default Value"));
+				break;
 		}
 
 		const contentNode = document.createElement("div");
 		contentNode.className = "draggablecontent";
 		contentNode.id = header + "-Content";
-		contentNode.dataset.widgetType = localStorage.getItem(header+"::WidgetType") ? localStorage.getItem(header+"::WidgetType") : entryType; //If saved, set value to saved value, else use entryType
+		contentNode.dataset.widgetType = type;
 		contentNode.style.top = localStorage.getItem(header+"::YPos");
 		contentNode.style.left = localStorage.getItem(header+"::XPos");
 
