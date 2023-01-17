@@ -170,7 +170,7 @@ function setWidgetType(type, e)
 	if(e.target.id.substring(e.target.id.length-8, e.target.id.length) === "-Content")
 	{
 		e.target.dataset.widgetType = widgetType;
-		header = e.target.id.substring(0, e.target.id.length-7);
+		header = e.target.id.substring(0, e.target.id.length-8);
 	}
 	else
 	{
