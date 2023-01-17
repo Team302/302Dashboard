@@ -15,7 +15,7 @@ document.addEventListener("click", function(event) {
 	if(document.getElementById("contextMenu"))
 	{
 		if(event.target.closest("#contextMenu")) return
-		removeWidgetMenu(document.getElementById("contextMenu"));
+		removeWidgetMenu();
 	}
 })
 
@@ -142,21 +142,25 @@ function showWidgetMenu(mouseEvent)
 	  }
 }
 
-function removeWidgetMenu(menu)
+function removeWidgetMenu()
 {
-	menu.remove();
+	document.getElementById("contextMenu").remove();
 }
 
 function removeButton(e)
 {
+	var header = "";
 	if(e.target.id.substring(e.target.id.length-8, e.target.id.length) === "-Content")
 	{
 		e.target.remove();
+		header = e.target.id.substring(0, e.target.id-7);
 	}
 	else
 	{
 		document.getElementById(e.target.id + "-Content").remove();
+		header = e.target.id;
 	}
+	removeWidgetMenu();
 }
 
 function setWidgetType(type, e)
@@ -235,16 +239,25 @@ function saveCurrentLayout()
 {
 	const currentWidgets = document.getElementsByClassName("draggableheader");
 	for(let cW of currentWidgets)
-	{
-		//check if we have already declared this entry in localStorage
-		//if statement checks if its a "new" entry being added
-		//otherwise, we can use the id of the div as the "prefix" to the web storage key
-		
-		//Webstore standard only supports string
+	{		
+		//Webstorage standard only supports string
 		localStorage.setItem(cW.id+"::ShowDefault", "true");
 		localStorage.setItem(cW.id+"::XPos", cW.style.left);
 		localStorage.setItem(cW.id+"::YPos", cW.style.top);
-		localStorage.setItem(cW.id+"::WidgetType", cW.dataset.widgetType);
+		localStorage.setItem(cW.id+"::WidgetType", document.getElementById(cW.id+"-Content").dataset.widgetType);
+	}
+
+	for(let i = 0; i < localStorage.length; i+=4)
+	{
+		var index = localStorage.key(i).indexOf("::");
+		var header = localStorage.key(i).substring(0, index);
+		if(!document.getElementById(header))
+		{
+			localStorage.removeItem(header+"::ShowDefault");
+			localStorage.removeItem(header+"::XPos");
+			localStorage.removeItem(header+"::YPos");
+			localStorage.removeItem(header+"::WidgetType");
+		}
 	}
 }
 
