@@ -9,6 +9,16 @@ const widgetHtml = `
 <button id="buttonBtn" class="button" data-type="button">Set widget type to button?</button>
 `
 
+//Add click listener to add better widget menu functionality
+//Stays open until user clicks elsewhere
+document.addEventListener("click", function(event) {
+	if(document.getElementById("contextMenu"))
+	{
+		if(event.target.closest("#contextMenu")) return
+		removeWidgetMenu(document.getElementById("contextMenu"));
+	}
+})
+
 /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
 function myFunction() {
@@ -130,6 +140,11 @@ function showWidgetMenu(mouseEvent)
 		  return null;
 		}
 	  }
+}
+
+function removeWidgetMenu(menu)
+{
+	menu.remove();
 }
 
 function removeButton(e)
