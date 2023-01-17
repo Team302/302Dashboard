@@ -242,8 +242,8 @@ function saveCurrentLayout()
 	{		
 		//Webstorage standard only supports string
 		localStorage.setItem(cW.id+"::ShowDefault", "true");
-		localStorage.setItem(cW.id+"::XPos", cW.style.left);
-		localStorage.setItem(cW.id+"::YPos", cW.style.top);
+		localStorage.setItem(cW.id+"::XPos", document.getElementById(cW.id+"-Content").style.left);
+		localStorage.setItem(cW.id+"::YPos", document.getElementById(cW.id+"-Content").style.top);
 		localStorage.setItem(cW.id+"::WidgetType", document.getElementById(cW.id+"-Content").dataset.widgetType);
 	}
 
