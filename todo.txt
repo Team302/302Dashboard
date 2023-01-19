@@ -1,0 +1,2 @@
+Add option for sendable chooser, logger level, etc
+Button will send a true or false value, may have to do some more setup than just sending a value
