@@ -7,6 +7,7 @@ const widgetHtml = `
 <button id="textBtn" class="button" data-type="text">Set widget type to text?</button>
 <button id="inputBtn" class="button" data-type="input">Set widget type to input?</button>
 <button id="buttonBtn" class="button" data-type="button">Set widget type to button?</button>
+<button id="chooserBtn" class="button" data-type="sendableChooser">Set widget type to sendable chooser?</button>
 `
 
 //Add click listener to add better widget menu functionality
@@ -196,6 +197,10 @@ function updateDashboard(key, value)
 				break;
 			case "input":
 				document.getElementById(key + "-Input").value = value;
+				break;
+			case "sendableChooser":
+				/// @TODO: update custom implementation of sendable chooser
+			break;
 		}
 	}
 }
@@ -307,6 +312,11 @@ function addToDashboard(header, type)
 						setEntryValue(e.target.value, header);
 					}
 				});
+				break;
+			case "sendableChooser":
+				contentChild = document.createElement("select");
+				contentChild.id = header+"-SendableChooser";
+				/// @TODO: create custom sendable chooser
 				break;
 			case "text":
 				contentChild = document.createElement("p");
