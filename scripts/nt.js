@@ -293,6 +293,9 @@ function addToDashboard(header, type)
 				contentChild = document.createElement("button");
 				contentChild.textContent = NetworkTables.getValue(header, "Default Value");
 				contentChild.id = header+"-Button";
+				contentChild.addEventListener("click", (e) => {
+					setEntryValue(true, header);
+				});
 				break;
 			case "input":
 				contentChild = document.createElement("input");
